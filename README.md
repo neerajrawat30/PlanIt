@@ -1,4 +1,4 @@
-# STORY-011: Private Counter Module
+# Private Counter Module
 
 ## Difficulty
 
@@ -10,19 +10,17 @@
 
 ---
 
-# User Story
+# Problem Statement
 
-> As a developer, I want a reusable counter module that manages its own internal state so that other parts of the application cannot accidentally modify the counter directly.
+In many real-world applications, internal data should not be directly accessible or modifiable from outside a module. This helps maintain data integrity and prevents accidental changes.
 
----
+Your task is to implement a reusable **Counter Module** in Node.js that manages its own internal counter. The counter should only be updated using the methods exposed by the module.
 
-# Business Goal
-
-Create a Node.js module that exposes methods for incrementing, decrementing, and retrieving a counter while keeping the counter value completely private.
+The module must ensure that the internal counter cannot be modified directly by external code.
 
 ---
 
-# Module Specification
+# Objective
 
 Implement the module inside:
 
@@ -30,113 +28,44 @@ Implement the module inside:
 src/index.js
 ```
 
-The module should export an object containing the following methods:
+The module should export an object with the following methods:
 
-```javascript
-increment()
-
-decrement()
-
-getCount()
-```
+- `increment()` – Increases the counter by **1**.
+- `decrement()` – Decreases the counter by **1**.
+- `getCount()` – Returns the current value of the counter.
 
 ---
 
-# Expected Behaviour
+# Functional Requirements
 
-### Initial Counter
-
-```javascript
-const counter = require("../src");
-
-counter.getCount(); // 0
-```
-
-### Increment
-
-```javascript
-counter.increment();
-
-counter.getCount(); // 1
-```
-
-### Decrement
-
-```javascript
-counter.decrement();
-
-counter.getCount(); // 0
-```
-
-### Private State
-
-The counter value must not be directly accessible.
-
-```javascript
-counter.count
-```
-
-should return
-
-```javascript
-undefined
-```
-
-Assigning
-
-```javascript
-counter.count = 999;
-```
-
-must not affect the actual counter value.
-
----
-
-# Acceptance Criteria
-
-- The module must export an object.
-- The object must expose:
-  - increment()
-  - decrement()
-  - getCount()
-- Counter should start from **0**.
-- increment() should increase the counter by 1.
-- decrement() should decrease the counter by 1.
-- getCount() should return the current value.
-- The internal counter must remain private.
-- Direct modification of the counter should not affect the stored value.
-
----
-
-# Test Cases
-
-| ID | Description | Expected Result |
-|----|-------------|----------------|
-| TC-001 | Counter starts at 0 | Pass |
-| TC-002 | increment() increases count | Pass |
-| TC-003 | decrement() decreases count | Pass |
-| TC-004 | getCount() returns latest value | Pass |
-| TC-005 | Internal counter is private | Pass |
-| TC-006 | Direct modification should not affect counter | Pass |
+- The counter should start with an initial value of **0**.
+- Calling `increment()` should increase the counter by **1**.
+- Calling `decrement()` should decrease the counter by **1**.
+- Calling `getCount()` should always return the latest counter value.
+- The actual counter value should remain private.
+- Directly assigning a value to `counter.count` must **not** affect the internal counter maintained by the module.
 
 ---
 
 # Example Usage
 
 ```javascript
-const counter = require("./src");
+const counter = require("./src/index");
 
 console.log(counter.getCount());
 
 counter.increment();
-
 console.log(counter.getCount());
 
 counter.increment();
-
 console.log(counter.getCount());
 
 counter.decrement();
+console.log(counter.getCount());
+
+console.log(counter.count);
+
+counter.count = 100;
 
 console.log(counter.getCount());
 ```
@@ -148,14 +77,40 @@ Expected Output
 1
 2
 1
+undefined
+1
 ```
+
+---
+
+# Expected Module API
+
+```javascript
+module.exports = {
+    increment,
+    decrement,
+    getCount
+};
+```
+
+---
+
+# Test Cases
+
+| ID | Description | Expected Result |
+|----|-------------|----------------|
+| TC-001 | Counter should return `0` initially | Pass |
+| TC-002 | Calling `increment()` should increase the counter | Pass |
+| TC-003 | Calling `decrement()` should decrease the counter | Pass |
+| TC-004 | Internal counter should not be directly accessible | Pass |
+| TC-005 | Direct modification using `counter.count` should not affect the actual counter | Pass |
 
 ---
 
 # Project Structure
 
 ```text
-story-011-private-counter/
+private-counter-module/
 
 │
 
@@ -172,33 +127,15 @@ story-011-private-counter/
 
 ---
 
-# Student Rules
-
-✅ Students may modify
-
-```text
-src/
-```
-
-❌ Students may NOT modify
-
-```text
-tests/
-
-package.json
-```
-
----
-
 # Running the Project
 
-Install dependencies
+Install dependencies:
 
 ```bash
 npm install
 ```
 
-Run tests
+Run the test cases:
 
 ```bash
 npm test
@@ -206,44 +143,42 @@ npm test
 
 ---
 
-# Evaluation Rubric
+# Evaluation Criteria
 
 | Criteria | Marks |
-|----------|------:|
-| All tests pass | 60 |
-| Correct encapsulation | 20 |
-| Clean code | 10 |
-| Proper module exports | 10 |
+|-------------------------------|------:|
+| All test cases pass | 60 |
+| Correct module implementation | 20 |
+| Proper use of encapsulation | 10 |
+| Code readability and structure | 10 |
 | **Total** | **100** |
 
 ---
 
 # Submission Requirements
 
-Students must submit
+Students must submit:
 
-- GitHub Repository
+- GitHub Repository Link
 - Pull Request
-- Passing test cases
+- A solution that passes all automated test cases
 
 ---
 
-# Definition of Done
+# Notes
 
-The story is complete when
-
-- All tests pass.
-- Counter behaves correctly.
-- Internal state remains private.
-- Test files are unchanged.
+- The exported object should only expose the required methods.
+- The internal counter should not be directly accessible from outside the module.
+- Do not modify the project structure or the test files.
 
 ---
 
-# Future Learning
+# Learning Outcomes
 
-After completing STORY-011 students will be ready for
+After completing this problem, you will gain hands-on experience with:
 
-- Module Pattern
+- Node.js Modules
+- Module Exports
+- Encapsulation
 - Closures
-- Factory Functions
-- Singleton Modules
+- Information Hiding
